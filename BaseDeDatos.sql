@@ -205,7 +205,6 @@ INSERT INTO Jugadores(nombre, id_liga, id_pais, id_equipo, id_posicion) VALUES
 ('Bryan Cristante', 3, 21, 21, 2),
 ('Patrick Cutrone', 3, 21, 22, 1),
 ('Marten de Roon', 3, 8, 23, 2),
--- Psg (24)
 ('Ousmane Dembélé', 4, 6, 24, 1),
 ('Gianluigi Donnarumma', 4, 21, 24, 4),
 ('Marquinhos', 4, 4, 24, 3),
