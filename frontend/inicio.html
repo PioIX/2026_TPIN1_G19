@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <h1>¡Bienvenido, <span id="nombre-usuario"></span>!</h1>
+    <p>Acá va a ir el juego.</p>
+    <button id="btn-logout">Cerrar sesión</button>
+
+    <script src="scripts/classes/user.js"></script>
+    <script>
+        const datos = localStorage.getItem('usuarioActivo');
+        if (!datos) {
+            window.location.href = 'index.html';
+        } else {
+            const usuario = JSON.parse(datos);
+            document.getElementById('nombre-usuario').textContent = usuario.nombre;
+        }
+
+        document.getElementById('btn-logout').addEventListener('click', () => {
+            localStorage.removeItem('usuarioActivo');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
