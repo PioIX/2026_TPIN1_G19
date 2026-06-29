@@ -215,8 +215,8 @@ INSERT INTO Jugadores(nombre, id_liga, id_pais, id_equipo, id_posicion) VALUES
 ('Thilo Kehrer', 4, 16, 26, 3),
 ('Alexandre Lacazette', 4, 6, 27, 1),
 ('Corentin Tolisso', 4, 6, 27, 2),
-('Edinson Cavani', 5, 15, 28, 1),
-('Sergio Romero', 5, 9, 28, 4),
-('Franco Mastantuono', 5, 9, 29, 2),
+('Miguel Merentiel', 5, 15, 28, 1),
+('Agustín Marchesín', 5, 9, 28, 4),
+('Fausto Vera', 5, 9, 29, 2),
 ('Leandro González Pírez', 5, 9, 29, 3),
-('Gabriel Rojas', 5, 9, 30, 3);
+('Franco Pardo', 5, 9, 30, 3);
