@@ -1,36 +1,33 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <title>Registrarse</title>
     <link rel="stylesheet" href="styles/styles.css">
 </head>
-
 <body>
-    <h1>Crear cuenta</h1>
+    <div class="card">
+        <h1>Crear cuenta</h1>
+        <form id="form-registro">
+            <label>DNI</label>
+            <input type="text" id="registro-dni" placeholder="Tu DNI">
 
-    <form id="form-registro">
-        <label>DNI</label>
-        <input type="text" id="registro-dni">
+            <label>Nombre completo</label>
+            <input type="text" id="registro-nombre" placeholder="Nombre y apellido">
 
-        <label>Nombre completo</label>
-        <input type="text" id="registro-nombre">
+            <label>Usuario</label>
+            <input type="text" id="registro-usuario" placeholder="Elegí un usuario">
 
-        <label>Usuario</label>
-        <input type="text" id="registro-usuario">
+            <label>Contraseña</label>
+            <input type="password" id="registro-contrasena" placeholder="Elegí una contraseña">
 
-        <label>Contraseña</label>
-        <input type="password" id="registro-contrasena">
+            <button type="submit">Crear cuenta</button>
+        </form>
+        <p id="mensaje-registro" class="mensaje-form"></p>
+        <p class="link-abajo">¿Ya tenés cuenta? <a href="index.html">Iniciá sesión</a></p>
+    </div>
 
-        <button type="submit">Crear cuenta</button>
-    </form>
-
-    <p id="mensaje-registro"></p>
-    <p>¿Ya tenés cuenta? <a href="index.html">Iniciá sesión</a></p>
-
-    <script src="scripts/classes/user.js"></script>
+    <script src="scripts/classes/Usuario.js"></script>
     <script src="scripts/logic.js"></script>
 </body>
-
 </html>

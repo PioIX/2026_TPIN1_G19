@@ -1,0 +1,187 @@
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2c3e50;
+    color: white;
+    padding: 16px 32px;
+}
+
+.admin-header h1 { margin: 0; font-size: 1.4rem; }
+
+.admin-info { display: flex; align-items: center; gap: 16px; font-size: 0.95rem; }
+
+.admin-info button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.admin-info button:hover { background-color: #c0392b; }
+
+.admin-tabs {
+    display: flex;
+    gap: 4px;
+    background-color: #f0f2f5;
+    padding: 12px 32px 0;
+    border-bottom: 2px solid #dde1e7;
+}
+
+.btn-tab {
+    padding: 10px 24px;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    color: #555;
+}
+
+.btn-tab:hover { background-color: #dde1e7; }
+
+.btn-tab.activo {
+    background-color: white;
+    color: #2c3e50;
+    font-weight: bold;
+    border-bottom: 2px solid white;
+    margin-bottom: -2px;
+}
+
+.admin-main { padding: 32px; max-width: 1100px; margin: 0 auto; }
+
+.seccion { display: none !important; }
+.seccion.activa { display: block !important; }
+
+.form-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.form-card h2 { margin-top: 0; color: #2c3e50; }
+
+.form-card label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.form-card input,
+.form-card select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.form-card input:focus,
+.form-card select:focus {
+    outline: none;
+    border-color: #2980b9;
+    box-shadow: 0 0 0 2px rgba(41,128,185,0.15);
+}
+
+.opciones-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.form-botones { display: flex; gap: 12px; margin-top: 20px; }
+
+.form-botones button[type="submit"] {
+    background-color: #27ae60;
+    color: white;
+    padding: 10px 28px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.form-botones button[type="submit"]:hover { background-color: #219a52; }
+
+.form-botones #btn-cancelar-jugador {
+    background-color: #95a5a6;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.form-botones #btn-cancelar-jugador:hover { background-color: #7f8c8d; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 32px;
+}
+
+thead tr { background-color: #2c3e50; color: white; }
+thead th { padding: 12px 16px; text-align: left; font-size: 0.9rem; }
+tbody tr:nth-child(even) { background-color: #f8f9fa; }
+tbody td { padding: 11px 16px; font-size: 0.95rem; color: #333; border-bottom: 1px solid #eee; }
+
+.acciones { display: flex; gap: 8px; }
+
+.btn-editar {
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.btn-editar:hover { background-color: #2471a3; }
+
+.btn-eliminar {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.btn-eliminar:hover { background-color: #c0392b; }
+
+.tag-admin {
+    background-color: #8e44ad;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.mensaje { margin-top: 10px; font-size: 0.95rem; min-height: 1.2em; }
+.mensaje.ok { color: #27ae60; font-weight: bold; }
+.mensaje.error { color: #e74c3c; font-weight: bold; }
+
+body {
+    display: block;
+    background-color: #f0f2f5;
+    min-height: 100vh;
+    align-items: unset;
+    justify-content: unset;
+}
