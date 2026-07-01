@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '.home.env' });
+require('dotenv').config({ path: '.pio.env' });
 const express = require('express');
 const cors = require('cors');
 const db = require('./modulos/mysql');
@@ -8,34 +8,43 @@ const port = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
-
 app.listen(port, () => console.log(`Servidor en http://localhost:${port}`));
 
-// REGISTRO
-app.post('/registro', async (req, res) => {
-    const { dni, nombre, usuario, contrasena } = req.body;
+//LOGIN
 
-    if (!dni || !nombre || !usuario || !contrasena) {
-        return res.status(400).json({ ok: false, mensaje: 'Completá todos los campos.' });
-    }
-
+app.post('/login', async (req, res) => {
+    const { usuario, contrasena } = req.body;
+    if (!usuario || !contrasena)
+        return res.status(400).json({ ok: false, mensaje: 'Completá usuario y contraseña.' });
     try {
-        const existe = await db.buscarUsuario(dni, usuario);
-        if (existe) {
-            return res.status(409).json({ ok: false, mensaje: 'Ya existe una cuenta con ese DNI o usuario.' });
-        }
-
-        await db.registrarUsuario(dni, nombre, usuario, contrasena);
-        return res.status(201).json({ ok: true, mensaje: 'Cuenta creada correctamente.' });
-
+        const encontrado = await db.verificarCredenciales(usuario, contrasena);
+        if (!encontrado)
+            return res.status(401).json({ ok: false, mensaje: 'Usuario o contraseña incorrectos. ¿No tenés cuenta? Registrate.' });
+        const { cont, ...sinPassword } = encontrado;
+        return res.status(200).json({ ok: true, usuario: sinPassword });
     } catch (err) {
         return res.status(500).json({ ok: false, mensaje: 'Error del servidor.' });
     }
 });
 
-// LOGIN
-app.post('/login', async (req, res) => {
-    const { usuario, contrasena } = req.body;
+//REGISTRO
+
+app.post('/registro', async (req, res) => {
+    const { dni, nombre, usuario, contrasena } = req.body;
+    if (!dni || !nombre || !usuario || !contrasena)
+        return res.status(400).json({ ok: false, mensaje: 'Completá todos los campos.' });
+    try {
+        const existe = await db.buscarUsuario(dni, usuario);
+        if (existe)
+            return res.status(409).json({ ok: false, mensaje: 'Ya existe una cuenta con ese DNI o usuario.' });
+        await db.registrarUsuario(dni, nombre, usuario, contrasena);
+        return res.status(201).json({ ok: true, mensaje: 'Cuenta creada correctamente.' });
+    } catch (err) {
+        return res.status(500).json({ ok: false, mensaje: 'Error del servidor.' });
+    }
+});
+
+//ADMIN: JUGADORES
 
 app.get('/admin/jugadores', async (req, res) => {
     try { return res.json({ ok: true, jugadores: await db.obtenerJugadores() }); }
