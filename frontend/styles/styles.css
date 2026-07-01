@@ -1,0 +1,102 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 40px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.card h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 28px;
+    font-size: 1.6rem;
+}
+
+
+label {
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 4px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2980b9;
+    box-shadow: 0 0 0 2px rgba(41,128,185,0.15);
+}
+
+button[type="submit"] {
+    width: 100%;
+    margin-top: 24px;
+    padding: 11px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button[type="submit"]:hover {
+    background-color: #219a52;
+}
+
+
+p.mensaje-form {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    min-height: 1.2em;
+    color: #e74c3c;
+    text-align: center;
+}
+
+
+.link-abajo {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.link-abajo a {
+    color: #2980b9;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.link-abajo a:hover {
+    text-decoration: underline;
+}

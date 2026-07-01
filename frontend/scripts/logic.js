@@ -21,12 +21,17 @@ async function manejarLogin(e) {
     const data = await respuesta.json();
 
     if (!respuesta.ok) {
-        document.getElementById('mensaje-login').textContent = data.mensaje + ' ¿No tenés cuenta? Registrate.';
+        document.getElementById('mensaje-login').textContent = data.mensaje;
         return;
     }
 
     localStorage.setItem('usuarioActivo', JSON.stringify(data.usuario));
-    window.location.href = 'inicio.html';
+
+    if (data.usuario.is_admin) {
+        window.location.href = 'admin.html';
+    } else {
+        window.location.href = 'inicio.html';
+    }
 }
 
 async function manejarRegistro(e) {
@@ -37,6 +42,10 @@ async function manejarRegistro(e) {
     const usuario = document.getElementById('registro-usuario').value.trim();
     const contrasena = document.getElementById('registro-contrasena').value;
 
+    if (dni.length !== 8 || isNaN(dni)) {
+    document.getElementById('mensaje-registro').textContent = 'El DNI debe tener exactamente 8 dígitos.';
+    return;
+}
     const respuesta = await fetch('http://localhost:4000/registro', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

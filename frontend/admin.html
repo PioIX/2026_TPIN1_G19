@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+<body>
+
+    <header class="admin-header">
+        <h1>Panel de Administración</h1>
+        <div class="admin-info">
+            <span>Bienvenido, <strong id="nombre-admin"></strong></span>
+            <button id="btn-cerrar-sesion">Cerrar sesión</button>
+        </div>
+    </header>
+
+    <nav class="admin-tabs">
+        <button id="btn-tab-jugadores"  class="btn-tab activo">Jugadores</button>
+        <button id="btn-tab-equipos"    class="btn-tab">Equipos</button>
+        <button id="btn-tab-ligas"      class="btn-tab">Ligas</button>
+        <button id="btn-tab-paises"     class="btn-tab">Países</button>
+        <button id="btn-tab-posiciones" class="btn-tab">Posiciones</button>
+        <button id="btn-tab-usuarios"   class="btn-tab">Usuarios</button>
+        <button id="btn-tab-partidas"   class="btn-tab">Partidas</button>
+    </nav>
+
+    <main class="admin-main">
+
+        <section id="seccion-jugadores" class="seccion activa">
+            <div class="form-card">
+                <h2 id="titulo-form-jugador">Agregar Jugador</h2>
+                <form id="form-jugador">
+                    <label>Nombre</label>
+                    <input type="text" id="j-nombre" placeholder="Nombre del jugador" required>
+                    <div class="opciones-grid">
+                        <div>
+                            <label>Liga</label>
+                            <select id="j-liga" required></select>
+                        </div>
+                        <div>
+                            <label>País</label>
+                            <select id="j-pais" required></select>
+                        </div>
+                        <div>
+                            <label>Equipo</label>
+                            <select id="j-equipo" required></select>
+                        </div>
+                        <div>
+                            <label>Posición</label>
+                            <select id="j-posicion" required></select>
+                        </div>
+                    </div>
+                    <div class="form-botones">
+                        <button type="submit">Guardar</button>
+                        <button type="button" id="btn-cancelar-jugador" style="display:none;">Cancelar</button>
+                    </div>
+                </form>
+                <p id="mensaje-jugadores" class="mensaje"></p>
+            </div>
+            <h2>Jugadores cargados</h2>
+            <table>
+                <thead>
+                    <tr><th>#</th><th>Nombre</th><th>Liga</th><th>País</th><th>Equipo</th><th>Posición</th><th>Acciones</th></tr>
+                </thead>
+                <tbody id="tabla-jugadores"><tr><td colspan="7">Cargando...</td></tr></tbody>
+            </table>
+        </section>
+
+        <section id="seccion-equipos" class="seccion">
+            <div class="form-card">
+                <h2>Agregar Equipo</h2>
+                <form id="form-equipo">
+                    <label>Nombre</label>
+                    <input type="text" id="eq-nombre" placeholder="Nombre del equipo" required>
+                    <div class="form-botones"><button type="submit">Agregar</button></div>
+                </form>
+                <p id="mensaje-equipos" class="mensaje"></p>
+            </div>
+            <h2>Equipos</h2>
+            <table>
+                <thead><tr><th>#</th><th>Nombre</th><th>Acciones</th></tr></thead>
+                <tbody id="tabla-equipos"><tr><td colspan="3">Cargando...</td></tr></tbody>
+            </table>
+        </section>
+
+        <section id="seccion-ligas" class="seccion">
+            <div class="form-card">
+                <h2>Agregar Liga</h2>
+                <form id="form-liga">
+                    <label>Nombre</label>
+                    <input type="text" id="li-nombre" placeholder="Nombre de la liga" required>
+                    <div class="form-botones"><button type="submit">Agregar</button></div>
+                </form>
+                <p id="mensaje-ligas" class="mensaje"></p>
+            </div>
+            <h2>Ligas</h2>
+            <table>
+                <thead><tr><th>#</th><th>Nombre</th><th>Acciones</th></tr></thead>
+                <tbody id="tabla-ligas"><tr><td colspan="3">Cargando...</td></tr></tbody>
+            </table>
+        </section>
+
+        <section id="seccion-paises" class="seccion">
+            <div class="form-card">
+                <h2>Agregar País</h2>
+                <form id="form-pais">
+                    <label>Nombre</label>
+                    <input type="text" id="pa-nombre" placeholder="Nombre del país" required>
+                    <div class="form-botones"><button type="submit">Agregar</button></div>
+                </form>
+                <p id="mensaje-paises" class="mensaje"></p>
+            </div>
+            <h2>Países</h2>
+            <table>
+                <thead><tr><th>#</th><th>Nombre</th><th>Acciones</th></tr></thead>
+                <tbody id="tabla-paises"><tr><td colspan="3">Cargando...</td></tr></tbody>
+            </table>
+        </section>
+
+        <section id="seccion-posiciones" class="seccion">
+            <div class="form-card">
+                <h2>Agregar Posición</h2>
+                <form id="form-posicion">
+                    <label>Nombre</label>
+                    <input type="text" id="pos-nombre" placeholder="Ej: Delantero, Arquero..." required>
+                    <div class="form-botones"><button type="submit">Agregar</button></div>
+                </form>
+                <p id="mensaje-posiciones" class="mensaje"></p>
+            </div>
+            <h2>Posiciones</h2>
+            <table>
+                <thead><tr><th>#</th><th>Nombre</th><th>Acciones</th></tr></thead>
+                <tbody id="tabla-posiciones"><tr><td colspan="3">Cargando...</td></tr></tbody>
+            </table>
+        </section>
+
+        <section id="seccion-usuarios" class="seccion">
+            <h2>Usuarios registrados</h2>
+            <p id="mensaje-usuarios" class="mensaje"></p>
+            <table>
+                <thead><tr><th>DNI</th><th>Nombre completo</th><th>Usuario</th><th>Acciones</th></tr></thead>
+                <tbody id="tabla-usuarios"><tr><td colspan="5">Cargando...</td></tr></tbody>
+            </table>
+        </section>
+
+        <section id="seccion-partidas" class="seccion">
+            <h2>Partidas registradas</h2>
+            <p id="mensaje-partidas" class="mensaje"></p>
+            <table>
+                <thead><tr><th>#</th><th>Usuario</th><th>Puntaje</th><th>Rondas</th><th>Fallidas</th><th>Momento</th><th>Acciones</th></tr></thead>
+                <tbody id="tabla-partidas"><tr><td colspan="7">Cargando...</td></tr></tbody>
+            </table>
+        </section>
+
+    </main>
+
+    <script src="scripts/admin.js"></script>
+</body>
+</html>
