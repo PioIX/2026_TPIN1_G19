@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adiviná el jugador</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+
+<body class="pagina-juego">
+
+    <div class="cancha-fondo"></div>
+
+    <main class="ficha">
+
+        <header class="ficha-header">
+            <p class="eyebrow">TEMPORADA 2026</p>
+            <h1>Adiviná el jugador</h1>
+            <p class="jugando-como">Jugando como <span id="nombre-jugador-sesion"></span></p>
+        </header>
+
+        <div class="avatar-misterio">?</div>
+
+        <section class="categorias" aria-label="Categorías de preguntas">
+            <button type="button" class="btn-categoria" data-categoria="liga">Liga</button>
+            <button type="button" class="btn-categoria" data-categoria="pais">País</button>
+            <button type="button" class="btn-categoria" data-categoria="equipo">Equipo</button>
+            <button type="button" class="btn-categoria" data-categoria="posicion">Posición</button>
+        </section>
+
+        <section id="selector-pregunta" class="selector-pregunta oculto">
+            <select id="select-opcion"></select>
+            <button type="button" id="btn-preguntar">Preguntar</button>
+            <button type="button" id="btn-cancelar-pregunta">Cancelar</button>
+        </section>
+
+        <section class="contadores">
+            <p id="contador-preguntas"></p>
+            <div class="pelotas" id="pelotas-intentos">
+                <span class="pelota" data-n="1">⚽</span>
+                <span class="pelota" data-n="2">⚽</span>
+                <span class="pelota" data-n="3">⚽</span>
+            </div>
+        </section>
+
+        <section id="consola" class="consola" aria-live="polite">
+            <p class="consola-vacia">Preguntá por una categoría o arriesgá el nombre cuando quieras.</p>
+        </section>
+
+        <form id="form-intento" autocomplete="off">
+            <input type="text" id="input-intento" list="lista-jugadores"
+                placeholder="Escribí el nombre de un jugador..." required>
+            <datalist id="lista-jugadores"></datalist>
+            <button type="submit">Adivinar</button>
+        </form>
+        <p id="mensaje-error-intento" class="mensaje-error"></p>
+
+        <section id="resultado-final" class="resultado oculto">
+            <p id="mensaje-final"></p>
+            <div class="botones-final">
+                <button id="btn-jugar-de-nuevo">Jugar de nuevo</button>
+                <button id="btn-cerrar-sesion">Cerrar sesión</button>
+            </div>
+
+            <h2>Mejores puntajes</h2>
+            <div id="tabla-puntajes" class="tabla-puntajes"></div>
+        </section>
+
+    </main>
+
+    <script src="scripts/classes/user.js"></script>
+    <script src="scripts/classes/juego.js"></script>
+    <script src="scripts/logic-juego.js"></script>
+</body>
+
+</html>
