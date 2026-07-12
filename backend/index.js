@@ -197,3 +197,71 @@ app.delete('/admin/partidas/:id', async (req, res) => {
         return res.json({ ok: true, mensaje: 'Partida eliminada.' });
     } catch { return res.status(500).json({ ok: false, mensaje: 'Error.' }); }
 });
+
+//JUEGO
+
+const CATEGORIAS_VALIDAS = ['liga', 'pais', 'equipo', 'posicion'];
+ 
+app.get('/juego/nuevo', async (req, res) => {
+    try {
+        const id = await db.obtenerJugadorAleatorio();
+        if (!id) return res.status(500).json({ ok: false, mensaje: 'No hay jugadores cargados todavía.' });
+        return res.json({ ok: true, idObjetivo: id });
+    } catch { return res.status(500).json({ ok: false, mensaje: 'Error al iniciar el juego.' }); }
+});
+ 
+app.get('/juego/jugadores', async (req, res) => {
+    try { return res.json({ ok: true, jugadores: await db.obtenerListaJugadores() }); }
+    catch { return res.status(500).json({ ok: false, mensaje: 'Error al obtener jugadores.' }); }
+});
+ 
+app.post('/juego/pregunta', async (req, res) => {
+    const { idObjetivo, categoria, valor } = req.body;
+    if (!idObjetivo || !CATEGORIAS_VALIDAS.includes(categoria) || !valor)
+        return res.status(400).json({ ok: false, mensaje: 'Pregunta inválida.' });
+    try {
+        const objetivo = await db.obtenerJugadorPorId(idObjetivo);
+        if (!objetivo) return res.status(404).json({ ok: false, mensaje: 'Jugador no encontrado.' });
+
+        const acierto = String(objetivo[categoria]).trim().toLowerCase() === String(valor).trim().toLowerCase();
+        return res.json({ ok: true, categoria, valor, acierto });
+    } catch { return res.status(500).json({ ok: false, mensaje: 'Error al procesar la pregunta.' }); }
+});
+ 
+app.post('/juego/intentar', async (req, res) => {
+    const { idObjetivo, idIntento } = req.body;
+    if (!idObjetivo || !idIntento)
+        return res.status(400).json({ ok: false, mensaje: 'Faltan datos.' });
+    try {
+        const objetivo = await db.obtenerJugadorPorId(idObjetivo);
+        const intento = await db.obtenerJugadorPorId(idIntento);
+        if (!objetivo || !intento)
+            return res.status(404).json({ ok: false, mensaje: 'Jugador no encontrado.' });
+ 
+        const acierto = objetivo.id === intento.id;
+        return res.json({ ok: true, acierto, nombreIntento: intento.nombre });
+    } catch { return res.status(500).json({ ok: false, mensaje: 'Error al procesar el intento.' }); }
+});
+ 
+app.get('/juego/revelar/:id', async (req, res) => {
+    try {
+        const jugador = await db.obtenerJugadorPorId(req.params.id);
+        if (!jugador) return res.status(404).json({ ok: false, mensaje: 'No encontrado.' });
+        return res.json({ ok: true, nombre: jugador.nombre });
+    } catch { return res.status(500).json({ ok: false, mensaje: 'Error.' }); }
+});
+ 
+app.post('/juego/finalizar', async (req, res) => {
+    const { dni, puntaje, rondas, fallidas } = req.body;
+    if (!dni || puntaje === undefined || rondas === undefined || fallidas === undefined)
+        return res.status(400).json({ ok: false, mensaje: 'Faltan datos.' });
+    try {
+        await db.guardarPartida(dni, puntaje, rondas, fallidas);
+        return res.status(201).json({ ok: true, mensaje: 'Partida guardada.' });
+    } catch { return res.status(500).json({ ok: false, mensaje: 'Error al guardar la partida.' }); }
+});
+ 
+app.get('/juego/puntajes', async (req, res) => {
+    try { return res.json({ ok: true, puntajes: await db.obtenerMejoresPuntajes() }); }
+    catch { return res.status(500).json({ ok: false, mensaje: 'Error al obtener puntajes.' }); }
+});
