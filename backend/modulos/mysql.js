@@ -165,3 +165,51 @@ exports.obtenerPartidas = async function () {
 exports.eliminarPartida = async function (id) {
     return await exports.realizarQuery(`DELETE FROM Partidas WHERE id = ?`, [id]);
 };
+
+//JUEGO
+
+exports.obtenerJugadorAleatorio = async function () {
+    const rows = await exports.realizarQuery(
+        `SELECT id FROM Jugadores ORDER BY RAND() LIMIT 1`
+    );
+    return rows.length > 0 ? rows[0].id : null;
+};
+ 
+exports.obtenerJugadorPorId = async function (id) {
+    const rows = await exports.realizarQuery(
+        `SELECT j.id, j.nombre,
+                j.id_liga, l.nombre AS liga,
+                j.id_pais, p.nombre AS pais,
+                j.id_equipo, e.nombre AS equipo,
+                j.id_posicion, pos.nombre AS posicion
+         FROM Jugadores j
+         JOIN Ligas l ON j.id_liga = l.id
+         JOIN Paises p ON j.id_pais = p.id
+         JOIN Equipos e ON j.id_equipo = e.id
+         JOIN Posicion pos ON j.id_posicion = pos.id
+         WHERE j.id = ?`,
+        [id]
+    );
+    return rows.length > 0 ? rows[0] : null;
+};
+ 
+exports.obtenerListaJugadores = async function () {
+    return await exports.realizarQuery(`SELECT id, nombre FROM Jugadores ORDER BY nombre ASC`);
+};
+ 
+exports.guardarPartida = async function (dni, puntaje, rondas, fallidas) {
+    return await exports.realizarQuery(
+        `INSERT INTO Partidas (dni, puntaje, rondas, fallidas, momento) VALUES (?, ?, ?, ?, NOW())`,
+        [dni, puntaje, rondas, fallidas]
+    );
+};
+ 
+exports.obtenerMejoresPuntajes = async function () {
+    return await exports.realizarQuery(
+        `SELECT u.nombreCompleto, u.nombre AS usuario, p.puntaje, p.rondas, p.momento
+         FROM Partidas p
+         JOIN Usuarios u ON p.dni = u.dni
+         ORDER BY p.puntaje DESC, p.momento ASC
+         LIMIT 10`
+    );
+};
