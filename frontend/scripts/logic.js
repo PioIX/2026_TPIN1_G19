@@ -30,7 +30,7 @@ async function manejarLogin(e) {
     if (data.usuario.is_admin) {
         window.location.href = 'admin.html';
     } else {
-        window.location.href = 'inicio.html';
+        window.location.href = 'juego.html';
     }
 }
 
