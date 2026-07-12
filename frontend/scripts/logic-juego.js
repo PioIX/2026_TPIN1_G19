@@ -158,3 +158,141 @@ async function confirmarPregunta() {
         document.querySelectorAll('.btn-categoria').forEach(b => b.disabled = true);
     }
 }
+
+async function manejarIntento(e) {
+    e.preventDefault();
+    if (!juego || juego.terminado) return;
+
+    const input = document.getElementById('input-intento');
+    const nombreIngresado = input.value.trim();
+
+    if (!nombreIngresado) {
+        mostrarError('Escribí un nombre.');
+        return;
+    }
+
+    const jugadorEncontrado = listaJugadoresCache.find(
+        j => j.nombre.trim().toLowerCase() === nombreIngresado.toLowerCase()
+    );
+
+    let acierto = false;
+    let nombreMostrado = nombreIngresado;
+
+    if (jugadorEncontrado) {
+        const respuesta = await fetch(`${API_URL}/juego/intentar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idObjetivo: juego.idObjetivo, idIntento: jugadorEncontrado.id })
+        });
+        const data = await respuesta.json();
+        if (!data.ok) {
+            mostrarError(data.mensaje);
+            return;
+        }
+        acierto = data.acierto;
+        nombreMostrado = data.nombreIntento;
+    } else {
+        acierto = false;
+    }
+
+    agregarEntradaConsola(acierto ? 'acierto' : 'fallo', `Intento: ${nombreMostrado}`);
+
+    const termino = juego.agregarIntento({ acierto });
+
+    input.value = '';
+    actualizarContadores();
+
+    if (termino) {
+        await finalizarPartida();
+    }
+}
+
+function agregarEntradaConsola(tipo, texto) {
+    const consola = document.getElementById('consola');
+    const vacia = consola.querySelector('.consola-vacia');
+    if (vacia) vacia.remove();
+
+    const entrada = document.createElement('p');
+    entrada.className = 'entrada entrada-' + tipo;
+    entrada.textContent = texto;
+    consola.appendChild(entrada);
+    consola.scrollTop = consola.scrollHeight;
+}
+
+function actualizarContadores() {
+    const preguntasRestantes = juego.preguntasRestantes();
+    document.getElementById('contador-preguntas').textContent =
+        `${preguntasRestantes} PREGUNTA${preguntasRestantes === 1 ? '' : 'S'} RESTANTE${preguntasRestantes === 1 ? '' : 'S'}`;
+
+    const intentosRestantes = juego.intentosRestantes();
+    document.querySelectorAll('#pelotas-intentos .pelota').forEach(p => {
+        const n = parseInt(p.dataset.n, 10);
+        p.classList.toggle('usada', n > intentosRestantes);
+    });
+}
+
+async function finalizarPartida() {
+    document.getElementById('form-intento').classList.add('oculto');
+    document.querySelectorAll('.btn-categoria').forEach(b => b.disabled = true);
+    cerrarSelectorPregunta();
+
+    const usuario = Usuario.obtenerSesion();
+    const puntaje = juego.calcularPuntaje();
+
+    await fetch(`${API_URL}/juego/finalizar`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            dni: usuario.dni,
+            puntaje,
+            rondas: juego.intentos.length,
+            fallidas: juego.gano ? juego.intentos.length - 1 : juego.intentos.length
+        })
+    });
+
+    const mensajeFinal = document.getElementById('mensaje-final');
+    if (juego.gano) {
+        mensajeFinal.textContent = `¡Acertaste! Ganaste ${puntaje} puntos.`;
+    } else {
+        const rev = await fetch(`${API_URL}/juego/revelar/${juego.idObjetivo}`);
+        const revData = await rev.json();
+        mensajeFinal.textContent = `Perdiste. El jugador era ${revData.nombre}.`;
+    }
+
+    await mostrarPuntajes();
+    document.getElementById('resultado-final').classList.remove('oculto');
+}
+
+async function mostrarPuntajes() {
+    const respuesta = await fetch(`${API_URL}/juego/puntajes`);
+    const data = await respuesta.json();
+
+    const tabla = document.getElementById('tabla-puntajes');
+    tabla.textContent = '';
+
+    const encabezado = document.createElement('div');
+    encabezado.className = 'fila-puntaje fila-puntaje-header';
+    ['Jugador', 'Puntaje', 'Rondas'].forEach(t => {
+        const c = document.createElement('div');
+        c.textContent = t;
+        encabezado.appendChild(c);
+    });
+    tabla.appendChild(encabezado);
+
+    data.puntajes.forEach(p => {
+        const fila = document.createElement('div');
+        fila.className = 'fila-puntaje';
+        [p.nombreCompleto, p.puntaje, p.rondas].forEach(valor => {
+            const celda = document.createElement('div');
+            celda.textContent = valor;
+            fila.appendChild(celda);
+        });
+        tabla.appendChild(fila);
+    });
+}
+
+function mostrarError(msg) {
+    const el = document.getElementById('mensaje-error-intento');
+    el.textContent = msg;
+    setTimeout(() => el.textContent = '', 2500);
+}
