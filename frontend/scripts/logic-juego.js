@@ -2,6 +2,7 @@ const API_URL = 'http://localhost:4000';
 let juego = null;
 let categoriaSeleccionada = null;
 let listaJugadoresCache = [];
+let nombreJugadorObjetivo = null;
 
 const NOMBRES_CATEGORIA = {
     liga: 'Liga',
@@ -24,6 +25,86 @@ const CLAVE_RESPUESTA = {
     posicion: 'posiciones'
 };
 
+const MAPA_FOTOS = {
+    'Erling Haaland': 'haaland',
+    'Aleix García': 'aleixgarcia',
+    'Alexander Isak': 'isak',
+    'Alexandre Lacazette': 'lacazette',
+    'Alexis Mac Allister': 'macallister',
+    'Alisson Becker': 'alisson',
+    'André Onana': 'onana',
+    'Antoine Griezmann': 'griezmann',
+    'Antonio Rüdiger': 'rudiger',
+    'Artem Dovbyk': 'dovbyk',
+    'Bart Verbruggen': 'verbruggen',
+    'Bernardo Silva': 'bernardosilva',
+    'Bruno Fernandes': 'brunofernandes',
+    'Bruno Guimarães': 'guimaraes',
+    'Bryan Cristante': 'cristante',
+    'Bukayo Saka': 'saka',
+    'Cole Palmer': 'palmer',
+    'Corentin Tolisso': 'tolisso',
+    'Cristian Romero': 'cristianromero',
+    'David Raya': 'davidraya',
+    'Dušan Vlahović': 'vlahovic',
+    'Ederson Moraes': 'ederson',
+    'Edinson Cavani': 'cavani',
+    'Emiliano Martínez': 'emilianomartinez',
+    'Enzo Fernández': 'enzofernandez',
+    'Erling Haaland': 'haaland',
+    'Folarin Balogun': 'balogun',
+    'Franco Mastantuono': 'mastantuono',
+    'Gabriel Rojas': 'rojas',
+    'Gianluigi Donnarumma': 'donnaruma',
+    'Giovanni Di Lorenzo': 'dilorenzo',
+    'Guglielmo Vicario': 'vicario',
+    'James Maddison': 'jamesmaddison',
+    'Jan Oblak': 'oblak',
+    'Jarrod Bowen': 'bowen',
+    'Jude Bellingham': 'bellingham',
+    'Kaoru Mitoma': 'mitoma',
+    'Kylian Mbappé': 'mbappe',
+    'Lautaro Martínez': 'lautaromartinez',
+    'Leandro González Pírez': 'gonzalezpirez',
+    'Leonardo Balerdi': 'balerdi',
+    'Lisandro Martínez': 'lisandromartinez',
+    'Manuel Locatelli': 'locatelli',
+    'Marc- André ter Stegen': 'terstegen',
+    'Marquinhos': 'marquinhos',
+    'Marten de Roon': 'deroon',
+    'Martin Ødegaard': 'odegaard',
+    'Martín Zubimendi': 'zubimendi',
+    'Mason Greenwood': 'greenwood',
+    'Mike Maignan': 'maignan',
+    'Mikel Oyarzabal': 'oyarzabal',
+    'Mohamed Salah': 'salah',
+    'Mohammed Kudus': 'kudus',
+    'Nico Williams': 'nicowilliams',
+    'Nicolò Barella': 'barella',
+    'Ollie Watkins': 'watkins',
+    'Ousmane Dembélé': 'dembele',
+    'Patrick Cutrone': 'cutrone',
+    'Paulo Dybala': 'dybala',
+    'Pedri González': 'pedri',
+    'Rafael Leão': 'leao',
+    'Raphinha': 'raphinha',
+    'Robert Sánchez': 'robertsanchez',
+    'Rodri Hernández': 'rodri',
+    'Romelu Lukaku': 'lukaku',
+    'Ronald Araújo': 'araujo',
+    'Rúben Dias':  'ruben',
+    'Sergio Romero': 'sergioromero',
+    'Theo Hernández': 'theohernandez',
+    'Thibaout Courtois': 'courtois',
+    'Thilo Kehrer': 'thilokehrer',
+    'Unai Simón': 'unaisimon',
+    'Vinícius Júnior': 'vinicius',
+    'Virgil van Dijk': 'van dijk',
+    'Vitinha': 'vitinha',
+    'William Saliba': 'saliba',
+    'Yann Sommer': 'sommer',
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
     const usuario = Usuario.obtenerSesion();
     if (!usuario) {
@@ -39,9 +120,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('btn-jugar-de-nuevo').addEventListener('click', () => iniciarPartida());
     document.getElementById('input-intento').addEventListener('input', actualizarSugerencias);
     document.getElementById('btn-cerrar-sesion').addEventListener('click', () => {
-    Usuario.cerrarSesion();
-    window.location.href = 'index.html';
-});
+        Usuario.cerrarSesion();
+        window.location.href = 'index.html';
+    });
 
     document.querySelectorAll('.btn-categoria').forEach(boton => {
         boton.addEventListener('click', () => abrirSelectorPregunta(boton.dataset.categoria));
@@ -82,6 +163,7 @@ async function iniciarPartida() {
         return;
     }
     juego = new Juego(data.idObjetivo, 3, 10);
+    nombreJugadorObjetivo = null;
 
     const consola = document.getElementById('consola');
     consola.textContent = '';
@@ -93,7 +175,12 @@ async function iniciarPartida() {
     document.getElementById('resultado-final').classList.add('oculto');
     document.getElementById('form-intento').classList.remove('oculto');
     document.getElementById('input-intento').value = '';
+    document.getElementById('lista-jugadores').textContent = '';
     cerrarSelectorPregunta();
+
+    const foto = document.getElementById('foto-jugador');
+    foto.classList.add('oculto');
+    foto.src = '';
 
     document.querySelectorAll('#pelotas-intentos .pelota').forEach(p => p.classList.remove('usada'));
     document.querySelectorAll('.btn-categoria').forEach(b => b.disabled = false);
@@ -195,11 +282,16 @@ async function manejarIntento(e) {
         acierto = false;
     }
 
+    if (acierto) {
+        nombreJugadorObjetivo = nombreMostrado;
+    }
+
     agregarEntradaConsola(acierto ? 'acierto' : 'fallo', `Intento: ${nombreMostrado}`);
 
     const termino = juego.agregarIntento({ acierto });
 
     input.value = '';
+    document.getElementById('lista-jugadores').textContent = '';
     actualizarContadores();
 
     if (termino) {
@@ -256,11 +348,28 @@ async function finalizarPartida() {
     } else {
         const rev = await fetch(`${API_URL}/juego/revelar/${juego.idObjetivo}`);
         const revData = await rev.json();
+        nombreJugadorObjetivo = revData.nombre;
         mensajeFinal.textContent = `Perdiste. El jugador era ${revData.nombre}.`;
     }
 
+    mostrarFotoJugador(nombreJugadorObjetivo);
+
     await mostrarPuntajes();
     document.getElementById('resultado-final').classList.remove('oculto');
+}
+
+function mostrarFotoJugador(nombre) {
+    const foto = document.getElementById('foto-jugador');
+    const archivo = MAPA_FOTOS[nombre];
+
+    if (!archivo) {
+        foto.classList.add('oculto');
+        return;
+    }
+
+    foto.onerror = () => foto.classList.add('oculto');
+    foto.src = `public/${archivo}.jpg`;
+    foto.classList.remove('oculto');
 }
 
 async function mostrarPuntajes() {
