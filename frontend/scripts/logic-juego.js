@@ -381,7 +381,7 @@ async function mostrarPuntajes() {
 
     const encabezado = document.createElement('div');
     encabezado.className = 'fila-puntaje fila-puntaje-header';
-    ['Jugador', 'Puntaje', 'Rondas'].forEach(t => {
+    ['Jugador', 'Puntaje', 'Intentos'].forEach(t => {
         const c = document.createElement('div');
         c.textContent = t;
         encabezado.appendChild(c);
