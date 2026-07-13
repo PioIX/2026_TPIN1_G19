@@ -516,6 +516,20 @@ p.mensaje-form {
     background: #E5B565;
 }
 
+.foto-jugador {
+    display: block;
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #D4A24C;
+    margin: 0 auto 1.25rem;
+}
+
+.foto-jugador.oculto {
+    display: none;
+}
+
 @media (max-width: 480px) {
     .ficha { padding: 1.5rem 1.25rem; }
     .categorias { grid-template-columns: repeat(2, 1fr); }
